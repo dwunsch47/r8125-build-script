@@ -77,7 +77,7 @@ pesign --certificate 'CachyOS Secure Boot' -s  --in $TARGET_PATH/r8125.ko --out 
 mv $TARGET_PATH/r8125.ko.signed $TARGET_PATH/r8125.ko
 
 echo "DEPMOD "$KERNEL_NAME""
-depmod `grubby --default-kernel | grep -oP '(?!\/boot\/vmlinuz-)\d.+'`
+depmod "$KERNEL_NAME"
 echo "load module $module"
 modprobe $module
 
