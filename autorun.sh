@@ -4,14 +4,14 @@
 # invoke insmod with all arguments we got
 # and use a pathname, as insmod doesn't look in . by default
 
-KERNEL_NAME=$(grubby --default-kernel | grep -oP "(?\!\/boot\/vmlinuz-)\d.+")
+KERNEL_NAME=$(grubby --default-kernel | grep -oP '(?!\/boot\/vmlinuz-)\d.+')
 
-TARGET_PATH=$(find /lib/modules/$(uname -r)/kernel/drivers/net/ethernet -name realtek -type d)
+TARGET_PATH=$(find /lib/modules/"$KERNEL_NAME"/kernel/drivers/net/ethernet -name realtek -type d)
 if [ "$TARGET_PATH" = "" ]; then
-	TARGET_PATH=$(find /lib/modules/$(uname -r)/kernel/drivers/net -name realtek -type d)
+	TARGET_PATH=$(find /lib/modules/"$KERNEL_NAME"/kernel/drivers/net -name realtek -type d)
 fi
 if [ "$TARGET_PATH" = "" ]; then
-	TARGET_PATH=/lib/modules/$(uname -r)/kernel/drivers/net
+	TARGET_PATH=/lib/modules/"$KERNEL_NAME"/kernel/drivers/net
 fi
 echo
 echo "Check old driver and unload it."
@@ -76,8 +76,8 @@ zstd -d --rm $TARGET_PATH/r8125.ko.zst
 pesign --certificate 'CachyOS Secure Boot' -s  --in $TARGET_PATH/r8125.ko --out $TARGET_PATH/r8125.ko.signed
 mv $TARGET_PATH/r8125.ko.signed $TARGET_PATH/r8125.ko
 
-echo "DEPMOD $(uname -r)"
-depmod `uname -r`
+echo "DEPMOD "$KERNEL_NAME""
+depmod `grubby --default-kernel | grep -oP '(?!\/boot\/vmlinuz-)\d.+'`
 echo "load module $module"
 modprobe $module
 
