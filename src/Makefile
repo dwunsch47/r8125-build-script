@@ -58,7 +58,6 @@ ENABLE_GIGA_LITE = y
 # CC := clang
 # CXX := clang++
 # ccflags-y += -DCC_USING_FENTRY -mfentry
-# ldflags-y += --strip-debug
 # LD := ld.lld
 # HOSTCC := clang
 # CC		= $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
