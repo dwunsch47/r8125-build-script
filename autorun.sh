@@ -31,7 +31,7 @@ echo "Build the module and install"
 echo "-------------------------------" >> log.txt
 date 1>>log.txt
 make clean
-make LLVM=1 KCFLAGS+="-g0 -flto=full -O3 -march=native -fvisibility=hidden -ffat-lto-objects -fvirtual-function-elimination -fwhole-program-vtables -fstack-protector-strong -fstack-clash-protection -fcf-protection -mllvm -enable-pipeliner" LDFLAGS="${LDFLAGS} -fuse-ld=mold -s" $@ all 1>>log.txt || exit 1
+make LLVM=1 KCFLAGS+="-g0 -flto=full -O3 -m64 -march=native -fvisibility=hidden -ffat-lto-objects -fvirtual-function-elimination -fwhole-program-vtables -fstack-protector-strong -fstack-clash-protection -fcf-protection -mllvm -enable-pipeliner -fasynchronous-unwind-tables -feliminate-unused-debug-types -fno-trapping-math -Wp,-D_FORTIFY_SOURCE=2" LDFLAGS="${LDFLAGS} -fuse-ld=mold -s -z now -z relro --enable-new-dtags" $@ all 1>>log.txt || exit 1
 module=`ls src/*.ko`
 module=${module#src/}
 module=${module%.ko}
